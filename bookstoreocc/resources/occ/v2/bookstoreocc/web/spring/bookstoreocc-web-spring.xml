@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="my.bookstore.controllers"/>
+
+    <bean id="rentalFieldMapper" parent="fieldMapper">
+        <property name="sourceClass"
+                  value="my.bookstore.facades.rental.data.RentalData"/>
+        <property name="destClass"
+                  value="my.bookstore.occ.dto.rental.RentalWsDTO"/>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="rentalWsDTOFieldSetLevelMapping">
+        <property name="dtoClass"
+                  value="my.bookstore.occ.dto.rental.RentalWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="rentalId"/>
+                <entry key="DEFAULT" value="rentalId,startDate"/>
+                <entry key="FULL" value="rentalId,startDate,endDate"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean parent="fieldSetLevelMapping" id="rentalListWsDTOFieldSetLevelMapping">
+        <property name="dtoClass"
+                  value="my.bookstore.occ.dto.rental.RentalListWsDTO"/>
+        <property name="levelMapping">
+            <map>
+                <entry key="BASIC" value="rentals(BASIC)"/>
+                <entry key="DEFAULT" value="rentals(DEFAULT)"/>
+                <entry key="FULL" value="rentals(FULL)"/>
+            </map>
+        </property>
+    </bean>
+</beans>

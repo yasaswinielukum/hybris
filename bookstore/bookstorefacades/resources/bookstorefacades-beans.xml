@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+	<bean class="de.hybris.platform.commercefacades.product.data.ProductData">
+		<property name="genders" type="java.util.List&lt;my.bookstore.facades.product.data.GenderData&gt;"/>
+		<property name="rentable" type="Boolean"/>
+		<property name="rewardPoints" type="Integer"/>
+		<property name="language" type="String"/>
+		<property name="ISBN10" type="String"/>
+		<property name="ISBN13" type="String"/>
+		<property name="publisher" type="String"/>
+		<property name="publishedDate" type="java.util.Date"/>
+		<property name="edition" type="Integer"/>
+		<property name="onlineDays" type="int"></property>
+		<property name="item" type="String"/>
+	</bean>
+
+
+	<bean class="my.bookstore.facades.product.data.GenderData">
+		<property name="code" type="String"/>
+		<property name="name" type="String"/>
+	</bean>
+
+	<bean class="my.bookstore.facades.rental.data.RentalData">
+		<property name="rentalId" type="Integer"/>
+		<property name="startDate" type="java.util.Date"/>
+		<property name="endDate" type="java.util.Date"/>
+	</bean>
+
+</beans>

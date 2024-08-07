@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+ Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+--><project name="bookstorebackoffice_buildcallbacks">
+    	
+    <property name="bookstorebackofficeWebFragmentSrc" value="${ext.bookstorebackoffice.path}/resources/web-fragment.xml"/>
+    	
+    <property name="bookstorebackofficeWebFragmentDestJar" value="${ext.backoffice.path}/web/webroot/WEB-INF/lib/webfragmentExt_bookstorebackoffice.jar"/>
+    	
+    <macrodef name="bookstorebackoffice_clean_classpath_file">
+        		
+        <sequential>
+            			
+            <copy failonerror="true" file="${ext.bookstorebackoffice.path}/.classpath" overwrite="true" tofile="${ext.bookstorebackoffice.path}/.classpath.edit">
+                				
+                <filterchain>
+                    					
+                    <linecontainsregexp negate="true">
+                        						
+                        <regexp pattern="^(\t\t\t\t|)$"/>
+                          
+                        <!-- added by script -->
+                        					
+                    </linecontainsregexp>
+                    				
+                </filterchain>
+                			
+            </copy>
+            			
+            <move failonerror="true" file="${ext.bookstorebackoffice.path}/.classpath.edit" overwrite="true" tofile="${ext.bookstorebackoffice.path}/.classpath"/>
+            		
+        </sequential>
+        	
+    </macrodef>
+    	
+    <macrodef name="bookstorebackoffice_after_clean">
+        		
+        <sequential>
+            			
+            <echo level="info" message="Generating .classpath file for bookstorebackoffice"/>
+            			
+            <create_extension_classpath_file extname="bookstorebackoffice"/>
+            			
+            <bookstorebackoffice_clean_classpath_file/>
+            			
+            <bookstorebackoffice_remove_web_fragment/>
+            		
+        </sequential>
+        	
+    </macrodef>
+    	
+    <macrodef name="bookstorebackoffice_after_build">
+        		
+        <sequential>
+            			
+            <bookstorebackoffice_remove_web_fragment/>
+            			
+            <bookstorebackoffice_create_web_fragment/>
+            		
+        </sequential>
+        	
+    </macrodef>
+    	
+    <macrodef name="bookstorebackoffice_remove_web_fragment">
+        		
+        <sequential>
+            			
+            <if>
+                				
+                <available file="${bookstorebackofficeWebFragmentDestJar}"/>
+                				
+                <then>
+                    					
+                    <delete file="${bookstorebackofficeWebFragmentDestJar}"/>
+                    				
+                </then>
+                			
+            </if>
+            		
+        </sequential>
+        	
+    </macrodef>
+    	
+    <macrodef name="bookstorebackoffice_create_web_fragment">
+        		
+        <sequential>
+            			
+            <if>
+                				
+                <available file="${bookstorebackofficeWebFragmentSrc}"/>
+                				
+                <then>
+                    					
+                    <sequential>
+                        						
+                        <jar destfile="${bookstorebackofficeWebFragmentDestJar}">
+                            							
+                            <metainf file="${bookstorebackofficeWebFragmentSrc}"/>
+                            						
+                        </jar>
+                        					
+                    </sequential>
+                    				
+                </then>
+                			
+            </if>
+            		
+        </sequential>
+        	
+    </macrodef>
+    	
+    <patternset id="bookstorebackoffice.localization.pattern">
+        		
+        <!-- core and hmc  -->
+        		
+        <include name="**/*locales*_en.properties"/>
+        		
+        <exclude name="**/hmc/web/webroot/WEB-INF/classes/**/*"/>
+        		
+        <exclude name="**/unittest/**/*"/>
+        		
+        <!-- cockpit (ng) -->
+        		
+        <include name="**/i3-label_en.properties"/>
+        		
+        <include name="**/labels_en.properties"/>
+        		
+        <!-- messages -->
+        		
+        <include name="**/*messages_en.properties"/>
+        		
+        <include name="**/*messages.properties"/>
+        		
+        <!-- frontend properties files in WEB-INF/messages folder -->
+        		
+        <include name="**/WEB-INF/messages/*_en.properties"/>
+        		
+        <!-- csv and impex -->
+        		
+        <include name="**/*_en.csv"/>
+        		
+        <include name="**/*_en.impex"/>
+        		
+        <include name="**/lang-en.properties"/>
+        		
+        <!-- email localizations from yacceleratorcore -->
+        		
+        <include name="resources/**/messages/*_en.properties"/>
+        		
+        <!-- include validation messages -->
+        		
+        <include name="resources/**/ValidationMessages.properties"/>
+        	
+    </patternset>
+    	
+    <macrodef name="bookstorebackoffice_before_build">
+        		
+        <sequential>
+            			
+            <register_sass_extension extensionname="bookstorebackoffice"/>
+            			
+            <register_sass_extension destination="" extensionname="bookstorebackoffice" resources="resources"/>
+            		
+        </sequential>
+        	
+    </macrodef>
+    
+</project>

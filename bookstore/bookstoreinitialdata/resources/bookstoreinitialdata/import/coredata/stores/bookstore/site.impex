@@ -1,0 +1,32 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+#
+# Import the CMS Site configuration for the Bookstore store
+#
+$productCatalog=bookstoreProductCatalog
+$contentCatalog=bookstoreContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$defaultLanguage=en
+$storeUid=bookstore
+$siteUid=bookstore
+
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+# Import modulegen config properties into impex macros
+$jarResource=$config-jarResource
+
+# Load the storefront context root config param
+$storefrontContextRoot=$config-storefrontContextRoot
+
+# Do not remove this until we completely get rid of black and blue for all user experience
+INSERT_UPDATE SiteTheme;code[unique=true]
+;alpha
+
+# CMS Site
+INSERT_UPDATE CMSSite;uid[unique=true];theme(code);channel(code);stores(uid);contentCatalogs(id);defaultCatalog(id);defaultLanguage(isoCode);urlPatterns;active;previewURL;startingPage(uid,$contentCV);urlEncodingAttributes;
+;$siteUid;alpha;B2C;$storeUid;$contentCatalog;$productCatalog;$defaultLanguage;(?i)^https?://[^/]+(/[^?]*)?\?(.*\&)?(site=$siteUid)(|\&.*)$,(?i)^https?://$siteUid[^/]+(|/.*|\?.*)$,(?i)^https?://api\.hybrisdev\.com(:[\d]+)?/rest/.*$,(?i)^https?://localhost(:[\d]+)?/rest/.*$;true;/?site=$siteUid;homepage;storefront,language;
+
+

@@ -1,0 +1,11 @@
+#Ant properties
+#Thu Mar 04 09:18:27 CET 2021
+version.api=2011
+vendor=hybris
+group.id=de.hybris.platform
+name=bookstorefacades
+description=bookstorefacades
+builddate=20210304 0914
+releasedate=20201119 1630
+version=2011.4
+module.name=platform-module

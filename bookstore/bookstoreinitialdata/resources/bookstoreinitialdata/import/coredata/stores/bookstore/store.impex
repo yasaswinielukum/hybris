@@ -1,0 +1,24 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# 
+# Create the Electronics BaseStore
+#
+
+$productCatalog=bookstoreProductCatalog
+$classificationCatalog=BookstoreClassification
+$currencies=EUR
+$storeUid=bookstore
+$defaultCurrency=EUR
+$languages=en
+$defaultLanguage=en
+$deliveryCountries=DE
+$checkoutFlowGroup=responsiveCheckoutGroup
+
+# Base Store
+INSERT_UPDATE BaseStore;uid[unique=true];catalogs(id);currencies(isocode);defaultCurrency(isocode);languages(isocode);defaultLanguage(isocode);deliveryCountries(isocode);
+;$storeUid;$productCatalog,$classificationCatalog;$currencies;$defaultCurrency;$languages;$defaultLanguage;$deliveryCountries;
+
+# Base Store - Update the checkout flow for responsive
+UPDATE BaseStore;uid[unique=true];checkoutFlowGroup;
+;$storeUid;$checkoutFlowGroup;

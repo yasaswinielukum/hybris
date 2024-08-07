@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="items.xsd">
+
+    <collectiontypes>
+        <collectiontype code="GenderList" elementtype="Gender" autocreate="true" generate="true" type="list"/>
+        <collectiontype code="SwatchColorSet" elementtype="SwatchColorEnum" autocreate="true" generate="true"
+                        type="set"/>
+    </collectiontypes>
+
+    <enumtypes>
+        <enumtype generate="true" code="SwatchColorEnum" autocreate="true" dynamic="true">
+            <value code="BLACK"/>
+            <value code="BLUE"/>
+            <value code="BROWN"/>
+            <value code="GREEN"/>
+            <value code="GREY"/>
+            <value code="ORANGE"/>
+            <value code="PINK"/>
+            <value code="PURPLE"/>
+            <value code="RED"/>
+            <value code="SILVER"/>
+            <value code="WHITE"/>
+            <value code="YELLOW"/>
+        </enumtype>
+        <enumtype code="RewardStatusLevel" autocreate="true" generate="true" dynamic="true">
+            <value code="BLUE"/>
+            <value code="SILVER"/>
+            <value code="GOLD"/>
+        </enumtype>
+    </enumtypes>
+    <relations>
+        <relation code="Rental2ProductRelation" localized="false">
+            <sourceElement type="Product" qualifier="product" cardinality="one"/>
+            <targetElement type="Rental" qualifier="rentals" cardinality="many"/>
+        </relation>
+
+        <relation code="Rental2CustomerRelation" localized="false">
+            <sourceElement type="Customer" qualifier="customer" cardinality="one"/>
+            <targetElement type="Rental" qualifier="rentals" cardinality="many"/>
+        </relation>
+
+        <relation code="Book2AuthorRelation" localized="false">
+            <deployment table="book2author" typecode="24245"/>
+            <sourceElement type="Book" qualifier="books" cardinality="many"/>
+            <targetElement type="User" qualifier="authors" cardinality="many"/>
+        </relation>
+
+    </relations>
+
+
+
+    <itemtypes>
+
+        <itemtype code="MyCronJob" extends="CronJob"
+                  autocreate="true" generate="true">
+            <attributes>
+                <attribute qualifier="minCartAge" type="java.lang.Integer">
+                    <persistence type="property" />
+                    <description>Carts modified after specified number of seconds will be picked up</description>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <!-- Add your item definitions here -->
+        <itemtype code="Product" autocreate="false" generate="false">
+            <attributes>
+                <attribute autocreate="true" qualifier="item" type="java.lang.String"
+                           generate="true">
+                    <persistence type="property" />
+                    <modifiers read="true" write="true" search="true"
+                               initial="true" optional="true" unique="false" />
+                </attribute>
+            </attributes>
+        </itemtype>
+    <itemtype code="WCMS" autocreate="true" generate="true" extends="SimpleBannerComponent"
+              jaloclass="my.bookstore.core.jalo.WCMS">
+        <attributes>
+            <attribute qualifier="media1" type="Media">
+                <modifiers read="true" write="true" search="true" optional="true" />
+                <persistence type="property" />
+            </attribute>
+            <attribute qualifier="button" type="java.lang.String">
+                <modifiers read="true" write="true" search="true" optional="true" />
+                <persistence type="property" />
+            </attribute>
+            <attribute qualifier="text" type="java.lang.String">
+                <modifiers read="true" write="true" search="true" optional="true" />
+                <persistence type="property" />
+            </attribute>
+        </attributes>
+    </itemtype>
+        <itemtype code="Rental" autocreate="true" generate="true">
+            <deployment table="rentals" typecode="24243"/>
+            <attributes>
+                <attribute qualifier="rentalId" type="java.lang.Integer">
+                    <modifiers optional="false" unique="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="startDate" type="java.util.Date">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="endDate" type="java.util.Date">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <itemtype code="RewardStatusLevelConfiguration" autocreate="true" generate="true">
+            <deployment table="rewardstatuslevelconfig" typecode="24244"/>
+            <attributes>
+                <attribute qualifier="configId" type="java.lang.String">
+                    <modifiers optional="false" unique="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="threshold" type="java.lang.Integer">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="image" type="Media">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="rewardStatusLevel" type="RewardStatusLevel">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <itemtype code="Customer" autocreate="false" generate="false">
+            <attributes>
+                <attribute qualifier="points" type="java.lang.Integer">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="rewardLevelStartDate" type="java.util.Date">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="expireDate" type="java.util.Date">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="rewardStatusLevel" type="RewardStatusLevel">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <itemtype code="Product" autocreate="false" generate="false">
+            <attributes>
+                <attribute qualifier="rentable" type="java.lang.Boolean">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                    <defaultvalue>Boolean.FALSE</defaultvalue>
+                </attribute>
+                <attribute qualifier="rewardPoints" type="java.lang.Integer">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <itemtype code="Book" extends="Product" autocreate="true" generate="true">
+            <attributes>
+                <attribute qualifier="language" type="java.lang.String">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="ISBN10" type="java.lang.String">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="ISBN13" type="java.lang.String">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="publisher" type="java.lang.String">
+                    <modifiers optional="false"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="publishedDate" type="java.util.Date">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="edition" type="java.lang.Integer">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+                <attribute qualifier="publication" type="java.lang.String">
+                    <modifiers optional="true"/>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <!-- TypeGroups are for structure of this file only -->
+
+        <typegroup name="Apparel">
+            <itemtype code="ApparelProduct" extends="Product"
+                      autocreate="true" generate="true"
+                      jaloclass="my.bookstore.core.jalo.ApparelProduct">
+                <description>Base apparel product extension that contains additional attributes.</description>
+                <attributes>
+                    <attribute qualifier="genders" type="GenderList">
+                        <description>List of genders that the ApparelProduct is designed for</description>
+                        <modifiers/>
+                        <persistence type="property"/>
+                    </attribute>
+                </attributes>
+            </itemtype>
+
+            <itemtype code="ApparelStyleVariantProduct" extends="VariantProduct"
+                      autocreate="true" generate="true"
+                      jaloclass="my.bookstore.core.jalo.ApparelStyleVariantProduct">
+                <description>Apparel style variant type that contains additional attribute describing variant style.
+                </description>
+                <attributes>
+                    <attribute qualifier="style" type="localized:java.lang.String"
+                               metatype="VariantAttributeDescriptor">
+                        <description>Color/Pattern of the product.</description>
+                        <modifiers/>
+                        <persistence type="property"/>
+                    </attribute>
+
+                    <attribute qualifier="swatchColors" type="SwatchColorSet">
+                        <description>A normalized color mapping to a standardized front-end navigable name.
+                        </description>
+                        <modifiers/>
+                        <persistence type="property"/>
+                    </attribute>
+                </attributes>
+
+            </itemtype>
+
+            <itemtype code="ApparelSizeVariantProduct" extends="ApparelStyleVariantProduct"
+                      autocreate="true" generate="true"
+                      jaloclass="my.bookstore.core.jalo.ApparelSizeVariantProduct">
+                <description>Apparel size variant type that contains additional attribute describing variant size.
+                </description>
+                <attributes>
+                    <attribute qualifier="size" type="localized:java.lang.String"
+                               metatype="VariantAttributeDescriptor">
+                        <description>Size of the product.</description>
+                        <modifiers/>
+                        <persistence type="property"/>
+                    </attribute>
+                </attributes>
+            </itemtype>
+        </typegroup>
+
+        <typegroup name="Electronics">
+            <itemtype code="ElectronicsColorVariantProduct" extends="VariantProduct"
+                      autocreate="true" generate="true"
+                      jaloclass="my.bookstore.core.jalo.ElectronicsColorVariantProduct">
+                <description>Electronics color variant type that contains additional attribute describing variant color.
+                </description>
+                <attributes>
+                    <attribute qualifier="color" type="localized:java.lang.String"
+                               metatype="VariantAttributeDescriptor">
+                        <description>Color of the product.</description>
+                        <modifiers/>
+                        <persistence type="property"/>
+                    </attribute>
+                </attributes>
+            </itemtype>
+        </typegroup>
+
+    </itemtypes>
+</items>
